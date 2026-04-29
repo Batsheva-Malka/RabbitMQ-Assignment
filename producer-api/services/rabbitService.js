@@ -1,6 +1,6 @@
 const { createRabbitService } = require('@weather-system/rabbit-service');
 
-const rabbit = createRabbitService({ confirmPublish: true });
+const rabbit = createRabbitService();
 
 async function connectRabbit() {
   return rabbit.connect();
@@ -10,7 +10,7 @@ async function closeRabbit() {
   return rabbit.close();
 }
 
-async function publishWeatherRequest(city) {
+function publishWeatherRequest(city) {
   return rabbit.publishJson({ city });
 }
 

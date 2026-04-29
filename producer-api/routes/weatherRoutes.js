@@ -46,10 +46,10 @@ router.post('/request', async (req, res) => {
   }
 
   try {
-    await publishWeatherRequest(city.trim());
+    publishWeatherRequest(city.trim());
     return res.status(202).json({ message: 'Request accepted and is being processed' });
   } catch (error) {
-    if (error && error.code === 'RABBIT_CHANNEL_NOT_INITIALIZED') {
+    if (error && error.message === 'Rabbit channel not initialized') {
       return res.status(503).json({ error: 'RabbitMQ unavailable' });
     }
 

@@ -5,14 +5,13 @@ function createRabbitService(options = {}) {
   const queueName = options.queueName || process.env.RABBITMQ_QUEUE || 'weather_queue';
   const durable = options.durable ?? false;
   const prefetch = options.prefetch ?? 1;
-  const confirmPublish = options.confirmPublish ?? false;
 
   let connection = null;
   let channel = null;
 
   async function connect() {
     connection = await amqp.connect(url);
-    channel = confirmPublish ? await connection.createConfirmChannel() : await connection.createChannel();
+    channel = await connection.createChannel();
 
     if (Number.isInteger(prefetch) && prefetch > 0) {
       await channel.prefetch(prefetch);
@@ -37,18 +36,9 @@ function createRabbitService(options = {}) {
     }
   }
 
-  async function publishJson(message) {
-    if (!channel) {
-      const error = new Error('Rabbit channel not initialized');
-      error.code = 'RABBIT_CHANNEL_NOT_INITIALIZED';
-      throw error;
-    }
-
+  function publishJson(message) {
+    if (!channel) throw new Error('Rabbit channel not initialized');
     channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
-
-    if (confirmPublish && typeof channel.waitForConfirms === 'function') {
-      await channel.waitForConfirms();
-    }
   }
 
   function consumeJson(onMessage, consumeOptions = {}) {
