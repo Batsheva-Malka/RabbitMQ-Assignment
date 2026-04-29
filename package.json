@@ -1,0 +1,17 @@
+{
+  "name": "rabbitmq-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "producer-api",
+    "processor-service",
+    "packages/*"
+  ],
+  "scripts": {
+    "start:producer": "npm run start --workspace producer-api",
+    "start:processor": "npm run start --workspace processor-service",
+    "start:producer:prefix": "npm --prefix producer-api start",
+    "start:processor:prefix": "npm --prefix processor-service start",
+    "test": "echo \"No tests configured\" && exit 0"
+  }
+}

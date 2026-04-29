@@ -1,0 +1,9 @@
+{
+  "name": "@weather-system/rabbit-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "amqplib": "^1.0.3"
+  }
+}
